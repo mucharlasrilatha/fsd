@@ -4,7 +4,50 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Login</title>
-        <link rel="stylesheet" href="styles.css" />
+        <style>
+            :root{
+                --bg:#f3f4f6;
+                --card:#ffffff;
+                --accent:#2563eb;
+                --muted:#6b7280;
+            }
+            *{box-sizing:border-box}
+            html,body{height:100%}
+            body{
+                margin:0;
+                font-family:Inter,Segoe UI,system-ui,Roboto,Arial,"Helvetica Neue",sans-serif;
+                background:linear-gradient(180deg,var(--bg),#eef2ff);
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                padding:24px;
+            }
+            .container{width:100%;max-width:420px}
+            .card{
+                background:var(--card);
+                padding:28px;
+                border-radius:12px;
+                box-shadow:0 6px 20px rgba(15,23,42,0.08);
+                display:flex;
+                flex-direction:column;
+                gap:12px;
+            }
+            .title{margin:0 0 6px 0;font-size:20px}
+            .label{font-size:13px;color:var(--muted);margin-top:8px}
+            input[type="email"],input[type="password"]{
+                width:100%;padding:10px 12px;border:1px solid #e6e9ef;border-radius:8px;font-size:15px;margin-top:6px;
+            }
+            .password-row{display:flex;gap:8px;align-items:center}
+            .toggle-btn{background:transparent;border:none;color:var(--accent);cursor:pointer;padding:6px 8px;border-radius:8px}
+            .toggle-btn:focus{outline:2px solid rgba(37,99,235,0.2)}
+            .remember{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px;margin-top:6px}
+            .submit{margin-top:8px;background:var(--accent);color:#fff;border:none;padding:10px 12px;border-radius:10px;font-size:16px;cursor:pointer}
+            .submit:focus{outline:3px solid rgba(37,99,235,0.18)}
+            .muted{color:var(--muted);font-size:13px;text-align:center;margin:8px 0 0}
+            a{color:var(--accent);text-decoration:none}
+            @media (max-width:420px){.card{padding:20px;border-radius:10px}}
+        </style>
+
     </head>
     <body>
         <main class="container">
@@ -28,6 +71,41 @@
             </form>
         </main>
 
-        <script src="script.js" defer></script>
+        <script>
+            document.addEventListener('DOMContentLoaded',()=>{
+                const form = document.getElementById('loginForm');
+                const email = document.getElementById('email');
+                const pwd = document.getElementById('password');
+                const toggle = document.getElementById('togglePwd');
+
+                toggle.addEventListener('click',()=>{
+                    const isPwd = pwd.type === 'password';
+                    pwd.type = isPwd ? 'text' : 'password';
+                    toggle.textContent = isPwd ? 'Hide' : 'Show';
+                    toggle.setAttribute('aria-label', isPwd ? 'Hide password' : 'Show password');
+                });
+
+                form.addEventListener('submit',(e)=>{
+                    if(!form.checkValidity()){
+                        e.preventDefault();
+                        if(!email.checkValidity()){
+                            email.focus();
+                            alert('Please enter a valid email address.');
+                            return;
+                        }
+                        if(!pwd.checkValidity()){
+                            pwd.focus();
+                            alert('Please enter a password (minimum 6 characters).');
+                            return;
+                        }
+                    } else {
+                        e.preventDefault();
+                        const data = {email: email.value, password: pwd.value, remember: document.getElementById('remember').checked};
+                        console.log('Login submit', data);
+                        alert('Form submitted (demo). Check console for payload.');
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
